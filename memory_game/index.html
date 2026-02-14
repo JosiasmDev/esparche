@@ -563,109 +563,545 @@
                 width: 40px;
                 height: 70px;
             }
+
+            #gamepad-hint {
+                display: none !important;
+            }
+        }
+
+        /* --- MAIN MENU HUB --- */
+        .game-wrapper {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: var(--bg-color);
+            transition: opacity 0.5s;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        #main-menu {
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            z-index: 2000;
+        }
+
+        .main-title {
+            font-size: 3rem;
+            color: #FF4081;
+            text-shadow: 2px 2px #fff;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .game-selection {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 4px solid transparent;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            border-color: var(--yake-color);
+        }
+
+        .game-card:active {
+            transform: scale(0.95);
+        }
+
+        .game-card .icon {
+            font-size: 4rem;
+            margin-bottom: 10px;
+        }
+
+        .game-card .title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* Generic Back Button */
+        #back-to-menu {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3000;
+            background: #FF5722;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: none;
+            /* Controlled by JS */
+        }
+
+        /* Game Specific Wrappers handled by ID */
+        #memory-game-wrapper {
+            overflow: hidden;
+            /* For memory game scrolling issues */
+        }
+
+        /* --- SIMON GAME --- */
+        #simon-board {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            padding: 15px;
+            background: #222;
+            border-radius: 50%;
+            width: 300px;
+            height: 300px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+
+        .simon-btn {
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: all 0.1s;
+            border: none;
+        }
+
+        .simon-btn:active,
+        .simon-btn.active {
+            opacity: 1;
+            transform: scale(0.98);
+            filter: brightness(1.5);
+        }
+
+        .simon-btn.green {
+            background-color: #4CAF50;
+            border-top-left-radius: 100%;
+        }
+
+        .simon-btn.red {
+            background-color: #F44336;
+            border-top-right-radius: 100%;
+        }
+
+        .simon-btn.yellow {
+            background-color: #FFEB3B;
+            border-bottom-left-radius: 100%;
+        }
+
+        .simon-btn.blue {
+            background-color: #2196F3;
+            border-bottom-right-radius: 100%;
+        }
+
+        /* --- WHACK GAME --- */
+        #whack-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            width: 320px;
+            height: 320px;
+            background: #AED581;
+            /* Light Grass */
+            padding: 20px;
+            border-radius: 30px;
+            border: 8px solid #7CB342;
+            box-shadow: 0 15px 0 #558B2F, inset 0 10px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .hole {
+            background: #5D4037;
+            /* Dirt */
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            border: 5px solid #8D6E63;
+            box-shadow: inset 0 10px 15px rgba(0, 0, 0, 0.5);
+            transition: all 0.1s;
+        }
+
+        .hole:active {
+            transform: scale(0.95);
+        }
+
+        .mole {
+            width: 70%;
+            height: 90%;
+            position: absolute;
+            bottom: -100%;
+            /* Hidden */
+            left: 15%;
+            transition: bottom 0.1s;
+            cursor: pointer;
+            pointer-events: none;
+            /* Only Clickable when up */
+        }
+
+        .mole.up {
+            bottom: -10px;
+            pointer-events: auto;
+        }
+
+        /* Mole Appearance override to be dynamic via JS, but base */
+        .mole-svg-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* --- DRESS GAME --- */
+        #dress-controls {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 40%;
+            max-width: 300px;
+            height: 90vh;
+            overflow-y: auto;
+        }
+
+        .dress-category h3 {
+            margin: 0 0 5px 0;
+            font-size: 0.9rem;
+            color: #880E4F;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .dress-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .dress-btn {
+            background: #f8bbd0;
+            border-radius: 8px;
+            padding: 8px 2px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border: 2px solid transparent;
+            text-align: center;
+            transition: transform 0.1s;
+        }
+
+        .dress-btn:active {
+            transform: scale(0.9);
+        }
+
+        .dress-btn:hover {
+            background: #F48FB1;
+        }
+
+        #dress-canvas {
+            width: 55%;
+            height: 90vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, #FCE4EC 0%, #F8BBD0 100%);
+            border-radius: 20px;
+            border: 4px dashed #EC407A;
+        }
+
+        #mannequin {
+            height: 95%;
+            width: auto;
+            filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.1));
+        }
+
+        @media (orientation: portrait) {
+            #dress-game-wrapper {
+                flex-direction: column !important;
+                justify-content: flex-start !important;
+            }
+
+            #dress-controls {
+                width: 100%;
+                height: 35vh;
+                order: 2;
+                max-width: none;
+            }
+
+            #dress-canvas {
+                width: 100%;
+                height: 50vh;
+                order: 1;
+                margin-bottom: 10px;
+            }
+
+            .dress-options {
+                display: flex;
+                overflow-x: auto;
+                padding-bottom: 5px;
+            }
+
+            .dress-btn {
+                min-width: 40px;
+            }
+
+            .main-title {
+                font-size: 2rem;
+                margin-top: 20px;
+            }
+
+            .game-card .icon {
+                font-size: 3rem;
+            }
+
+            .game-card .title {
+                font-size: 1.2rem;
+            }
+
+            .game-selection {
+                gap: 10px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div id="game-container">
-        <!-- Header: Jugadores -->
-        <header id="score-board">
-            <!-- Generado dinámicamente -->
-        </header>
-
-        <!-- Botón Música -->
-        <button id="music-toggle" class="music-btn">🔇 Música</button>
-
-        <!-- Audio Musica -->
-        <audio id="bg-music" loop>
-            <source src="music.mp3" type="audio/mpeg">
-        </audio>
-
-        <!-- Área de Juego -->
-        <div id="board-area">
-            <div id="card-grid"></div>
-            <div id="timer-display" class="hidden">30</div>
-        </div>
-
-        <!-- Menú Inicial -->
-        <div id="start-screen" class="overlay">
-            <h1>¡Memoria de Parejas!</h1>
-
-            <!-- Selector de Jugadores -->
-            <div style="margin-bottom: 20px; width: 90%; max-width: 800px;">
-                <h2>Jugadores:</h2>
-                <div id="player-options" class="card-options">
-                    <!-- Generado dinámicamente por renderPlayerOptions() -->
-                </div>
+    <!-- MENU -->
+    <div id="main-menu" class="game-wrapper">
+        <h1 class="main-title">🌟 Arcade de Esparche 🌟</h1>
+        <div class="game-selection">
+            <div class="game-card" onclick="openGame('MEMORY')">
+                <div class="icon">🃏</div>
+                <div class="title">Memoria</div>
+            </div>
+            <div class="game-card" onclick="openGame('SIMON')">
+                <div class="icon">🎹</div>
+                <div class="title">Simón Dice</div>
+            </div>
+            <div class="game-card" onclick="openGame('WHACK')">
+                <div class="icon">🔨</div>
+                <div class="title">Atrapa</div>
             </div>
 
-            <!-- Selector de Tema -->
-            <div style="margin-bottom: 20px;">
-                <h2>Elige Cartas:</h2>
-                <div id="theme-options" class="card-options">
-                    <div class="menu-option theme-opt selected" data-value="ANIMALS" onclick="selectTheme('ANIMALS')">🐶
-                        Animales</div>
-                    <div class="menu-option theme-opt" data-value="FACES" onclick="selectTheme('FACES')">😊 Caritas
-                    </div>
-                </div>
-            </div>
-
-            <!-- Selector de Cantidad -->
-            <div style="margin-bottom: 20px;">
-                <h2>Cantidad de Cartas:</h2>
-                <div id="card-options" class="card-options">
-                    <div class="menu-option selected" data-value="12" onclick="updateMenuSelection(12)">12</div>
-                    <div class="menu-option" data-value="16" onclick="updateMenuSelection(16)">16</div>
-                    <div class="menu-option" data-value="20" onclick="updateMenuSelection(20)">20</div>
-                    <div class="menu-option" data-value="24" onclick="updateMenuSelection(24)">24</div>
-                </div>
-            </div>
-
-            <!-- Boton Jugar -->
-            <div id="action-section" style="margin-top: 30px;">
-                <div class="menu-option"
-                    style="background:#4ade80; color:#065f46; font-weight:bold; padding: 15px 50px;"
-                    onclick="startGame()">
-                    ¡JUGAR! ▶️
-                </div>
-            </div>
-
-            <p style="font-size: 0.9rem; opacity: 0.8; margin-top:20px">
-                Usa el mando 🎮 o táctil 👆
-            </p>
-        </div>
-
-        <!-- Pantalla Fin de Juego -->
-        <div id="game-over-screen" class="overlay hidden">
-            <h1 id="winner-display" style="font-size: 3rem; margin-bottom: 20px;"></h1>
-            <div id="final-scores" style="font-size: 1.5rem; margin-bottom: 30px;"></div>
-
-            <!-- Mobile Button -->
-            <div onclick="resetGame()" class="menu-option"
-                style="margin-bottom: 20px; background: #4ade80; color: #065f46; font-weight: bold; padding: 15px 30px;">
-                🔄 Jugar Otra Vez
-            </div>
-
-            <div style="font-size: 1.2rem; opacity: 0.7;">
-                (O presiona <span style="background:#333; color:white; padding:2px 8px; border-radius:50%">×</span> en
-                el mando)
-            </div>
-        </div>
-
-        <!-- Pista de Controles -->
-        <div id="gamepad-hint">
-            <span>⚠️ Presiona cualquier botón en el mando para conectar...</span>
         </div>
     </div>
 
+    <button id="back-to-menu" onclick="goToMainMenu()">🏠 Menú</button>
+
+    <!-- WRAPPER: MEMORY (Existing) -->
+    <div id="memory-game-wrapper" class="game-wrapper hidden">
+        <div id="game-container">
+            <!-- Header: Jugadores -->
+            <header id="score-board">
+                <!-- Generado dinámicamente -->
+            </header>
+
+            <!-- Botón Música -->
+            <button id="music-toggle" class="music-btn">🔇 Música</button>
+
+            <!-- Audio Musica -->
+            <audio id="bg-music" loop>
+                <source src="music.mp3" type="audio/mpeg">
+            </audio>
+
+            <!-- Área de Juego -->
+            <div id="board-area">
+                <div id="card-grid"></div>
+                <div id="timer-display" class="hidden">30</div>
+            </div>
+
+            <!-- Menú Inicial -->
+            <div id="start-screen" class="overlay">
+                <h1>¡Memoria de Parejas!</h1>
+
+                <!-- Selector de Jugadores -->
+                <div style="margin-bottom: 20px; width: 90%; max-width: 800px;">
+                    <h2>Jugadores:</h2>
+                    <div id="player-options" class="card-options">
+                        <!-- Generado dinámicamente por renderPlayerOptions() -->
+                    </div>
+                </div>
+
+                <!-- Selector de Tema -->
+                <div style="margin-bottom: 20px;">
+                    <h2>Elige Cartas:</h2>
+                    <div id="theme-options" class="card-options">
+                        <div class="menu-option theme-opt selected" data-value="ANIMALS"
+                            onclick="selectTheme('ANIMALS')">🐶
+                            Animales</div>
+                        <div class="menu-option theme-opt" data-value="FACES" onclick="selectTheme('FACES')">😊 Caritas
+                        </div>
+                        <div class="menu-option theme-opt" data-value="FRUITS" onclick="selectTheme('FRUITS')">🍎 Frutas
+                        </div>
+                        <div class="menu-option theme-opt" data-value="VEHICLES" onclick="selectTheme('VEHICLES')">🚗
+                            Vehículos</div>
+                        <div class="menu-option theme-opt" data-value="JOBS" onclick="selectTheme('JOBS')">👩‍⚕️ Oficios
+                        </div>
+                        <div class="menu-option theme-opt" data-value="CLOTHES" onclick="selectTheme('CLOTHES')">👕 Ropa
+                        </div>
+                        <div class="menu-option theme-opt" data-value="SPORTS" onclick="selectTheme('SPORTS')">⚽
+                            Deportes
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selector de Cantidad -->
+                <div style="margin-bottom: 20px;">
+                    <h2>Cantidad de Cartas:</h2>
+                    <div id="card-options" class="card-options">
+                        <div class="menu-option selected" data-value="12" onclick="updateMenuSelection(12)">12</div>
+                        <div class="menu-option" data-value="16" onclick="updateMenuSelection(16)">16</div>
+                        <div class="menu-option" data-value="20" onclick="updateMenuSelection(20)">20</div>
+                        <div class="menu-option" data-value="24" onclick="updateMenuSelection(24)">24</div>
+                    </div>
+                </div>
+
+                <!-- Boton Jugar -->
+                <div id="action-section" style="margin-top: 30px;">
+                    <div class="menu-option"
+                        style="background:#4ade80; color:#065f46; font-weight:bold; padding: 15px 50px;"
+                        onclick="startGame()">
+                        ¡JUGAR! ▶️
+                    </div>
+                </div>
+
+                <p style="font-size: 0.9rem; opacity: 0.8; margin-top:20px">
+                    Usa el mando 🎮 o táctil 👆
+                </p>
+            </div>
+
+            <!-- Pantalla Fin de Juego -->
+            <div id="game-over-screen" class="overlay hidden">
+                <h1 id="winner-display" style="font-size: 3rem; margin-bottom: 20px;"></h1>
+                <div id="final-scores" style="font-size: 1.5rem; margin-bottom: 30px;"></div>
+
+                <!-- Mobile Button -->
+                <div onclick="resetGame()" class="menu-option"
+                    style="margin-bottom: 20px; background: #4ade80; color: #065f46; font-weight: bold; padding: 15px 30px;">
+                    🔄 Jugar Otra Vez
+                </div>
+
+                <div style="font-size: 1.2rem; opacity: 0.7;">
+                    (O presiona <span style="background:#333; color:white; padding:2px 8px; border-radius:50%">×</span>
+                    en el mando)
+                </div>
+            </div> <!-- End game-over-screen -->
+
+            <div id="gamepad-hint" style="display:none !important"></div>
+        </div> <!-- End game-container -->
+    </div> <!-- End memory-game-wrapper -->
+
+    <!-- SIMON SAYS WRAPPER -->
+    <div id="simon-game-wrapper" class="game-wrapper hidden">
+        <h1 class="main-title">🎹 Simón Dice 🎹</h1>
+
+        <div id="simon-status" style="font-size: 1.5rem; margin-bottom: 20px; height: 30px;">Presiona Jugar
+        </div>
+
+        <div id="simon-board">
+            <div class="simon-btn green" data-color="0" onclick="handleSimonInput(0)"></div>
+            <div class="simon-btn red" data-color="1" onclick="handleSimonInput(1)"></div>
+            <div class="simon-btn yellow" data-color="2" onclick="handleSimonInput(2)"></div>
+            <div class="simon-btn blue" data-color="3" onclick="handleSimonInput(3)"></div>
+        </div>
+
+        <div style="margin-top: 30px; display: flex; gap: 20px;">
+            <button onclick="startSimonGame()" class="menu-option"
+                style="background:#2196F3; color: white; font-weight:bold;">▶️ Jugar</button>
+            <button onclick="goToMainMenu()" class="menu-option">🏠 Salir</button>
+        </div>
+    </div>
+    </div>
+
+    <!-- WHACK WRAPPER -->
+    <div id="whack-game-wrapper" class="game-wrapper hidden">
+        <h1 class="main-title">🔨 Atrapa al Muñeco 🔨</h1>
+
+        <div style="display:flex; gap:20px; font-size:1.5rem; margin-bottom:10px;">
+            <div>Puntos: <span id="whack-score">0</span></div>
+            <div>Tiempo: <span id="whack-timer">30</span>s</div>
+        </div>
+
+        <div id="whack-grid">
+            <!-- 9 Holes -->
+            <div class="hole" data-id="0">
+                <div class="mole"></div>
+            </div>
+            <div class="hole" data-id="1">
+                <div class="mole"></div>
+            </div>
+            <div class="hole" data-id="2">
+                <div class="mole"></div>
+            </div>
+            <div class="hole" data-id="3">
+                <div class="mole"></div>
+            </div>
+            <div class="hole" data-id="4">
+                <div class="mole"></div>
+            </div>
+            <div class="hole" data-id="5">
+                <div class="mole"></div>
+            </div>
+            <div class="hole" data-id="6">
+                <div class="mole"></div>
+            </div>
+            <div class="hole" data-id="7">
+                <div class="mole"></div>
+            </div>
+            <div class="hole" data-id="8">
+                <div class="mole"></div>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px; display: flex; gap: 20px;">
+            <button onclick="startWhackGame()" class="menu-option"
+                style="background:#FF9800; color: white; font-weight:bold;">▶️ Jugar</button>
+            <button onclick="goToMainMenu()" class="menu-option">🏠 Salir</button>
+        </div>
+    </div>
+
+
+
+    </div>
+
+
+
+
+    </div>
+    </div>
+
     <script>
+        // --- MAIN MENU NAVIGATION ---
+        let APP_MODE = 'MENU'; // MENU, MEMORY, SIMON, WHACK, RACE
+        // Functions defined below (see NAVIGATION section)
+
         // --- CONFIGURACIÓN & ESTADO ---
         const PLAYERS_DEFAULT = [
             { name: "Danna", color: "#FF4081", id: 0, magnets: 0, score: 0, wins: 0 },
             { name: "Yake", color: "#2196F3", id: 1, magnets: 0, score: 0, wins: 0 },
             { name: "Josi", color: "#4CAF50", id: 2, magnets: 0, score: 0, wins: 0 },
-            { name: "Claret", color: "#FF9800", id: 3, magnets: 0, score: 0, wins: 0 },
+            { name: "Clairet", color: "#FF9800", id: 3, magnets: 0, score: 0, wins: 0 },
             { name: "Pas", color: "#00BCD4", id: 4, magnets: 0, score: 0, wins: 0 },
             { name: "Ingrid", color: "#9C27B0", id: 5, magnets: 0, score: 0, wins: 0 },
             { name: "Gabi", color: "#009688", id: 6, magnets: 0, score: 0, wins: 0 },
@@ -690,7 +1126,12 @@
             localStorage.setItem('memory_game_wins', JSON.stringify(PLAYERS.map(p => p.wins)));
         }
 
-        const EMOJIS_FACES = ['😊', '😢', '😠', '😲', '😱', '😍', '😴', '😂', '😉', '🤔', '🥰', '😌'];
+        const EMOJIS_FACES = ['😀', '😂', '😍', '😎', '😡', '😱', '🤔', '😴', '🤡', '👻', '👽', '🤖'];
+        const EMOJIS_FRUITS = ['🍎', '🍌', '🍇', '🍉', '🍓', '🍒', '🍍', '🥝', '🥑', '🥥', '🍊', '🍋'];
+        const EMOJIS_VEHICLES = ['🚗', '🚌', '🚑', '🚓', '🚒', '🚜', '🚲', '🛴', '🛵', '🚂', '🚁', '🚀'];
+        const EMOJIS_JOBS = ['👮', '👷', '💂', '🕵️', '👩‍⚕️', '👨‍🌾', '👩‍🍳', '👩‍🎤', '👩‍🎨', '👩‍🚀', '👨‍🚒', '🧙'];
+        const EMOJIS_CLOTHES = ['👕', '👖', '👗', '👘', '👙', '👚', '👛', '👜', '👞', '👟', '🧢', '🎩'];
+        const EMOJIS_SPORTS = ['⚽', '🏀', '🏈', '⚾', '🎾', '🏐', '🏉', '🎱', '🏓', '🏸', '🥊', '🥋'];
         const EMOJIS_ANIMALS = ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮'];
 
         // --- AVATAR GENERATOR (SVG) ---
@@ -733,7 +1174,7 @@
                  <line x1="30" y1="90" x2="70" y2="90" stroke="#388E3C" stroke-width="3" />
                  <rect x="35" y="120" width="12" height="25" fill="#333" />
                 <rect x="53" y="120" width="12" height="25" fill="#333" />`;
-            } else if (name === 'Claret') {
+            } else if (name === 'Clairet') {
                 body = `
                 <circle cx="50" cy="50" r="30" fill="#FFCCBC" />
                 <path d="M 15 50 Q 10 30 30 20 Q 50 10 70 20 Q 90 30 85 50" fill="#FFD54F" /> 
@@ -931,7 +1372,11 @@
                     if (menuSection === 0) {
                         handlePlayerSectionMove(move);
                     } else if (menuSection === 1) {
-                        if (move !== 0) selectTheme(currentTheme === 'ANIMALS' ? 'FACES' : 'ANIMALS');
+                        const themes = ['ANIMALS', 'FACES', 'FRUITS', 'VEHICLES', 'JOBS', 'CLOTHES', 'SPORTS'];
+                        let idx = themes.indexOf(currentTheme);
+                        if (move > 0) idx = (idx + 1) % themes.length;
+                        if (move < 0) idx = (idx - 1 + themes.length) % themes.length;
+                        selectTheme(themes[idx]);
                     } else if (menuSection === 2) {
                         const options = [12, 16, 20, 24];
                         let idx = options.indexOf(cardCount);
@@ -998,7 +1443,16 @@
 
         function initBoard() {
             const pairsCount = cardCount / 2;
-            const sourceEmojis = (currentTheme === 'ANIMALS') ? EMOJIS_ANIMALS : EMOJIS_FACES;
+            let sourceEmojis = EMOJIS_ANIMALS;
+            switch (currentTheme) {
+                case 'FACES': sourceEmojis = EMOJIS_FACES; break;
+                case 'FRUITS': sourceEmojis = EMOJIS_FRUITS; break;
+                case 'VEHICLES': sourceEmojis = EMOJIS_VEHICLES; break;
+                case 'JOBS': sourceEmojis = EMOJIS_JOBS; break;
+                case 'CLOTHES': sourceEmojis = EMOJIS_CLOTHES; break;
+                case 'SPORTS': sourceEmojis = EMOJIS_SPORTS; break;
+                default: sourceEmojis = EMOJIS_ANIMALS;
+            }
 
             // Need more emojis if cardCount is high?
             // Arrays have 12. 24 cards = 12 pairs. Max supported is 24 cards.
@@ -1413,6 +1867,35 @@
             if (isPressed(BTN.TRIANGLE)) handleInput('reset');
         }
 
+        // --- NAVIGATION ---
+        function openGame(game) {
+            APP_MODE = game;
+            document.getElementById('main-menu').classList.add('hidden');
+            document.querySelectorAll('.game-wrapper').forEach(el => el.classList.add('hidden'));
+
+            if (game === 'MEMORY') {
+                document.getElementById('memory-game-wrapper').classList.remove('hidden');
+                resetGame();
+            } else if (game === 'SIMON') {
+                document.getElementById('simon-game-wrapper').classList.remove('hidden');
+            } else if (game === 'WHACK') {
+                document.getElementById('whack-game-wrapper').classList.remove('hidden');
+            }
+        }
+
+        function goToMainMenu() {
+            APP_MODE = 'MENU';
+            document.querySelectorAll('.game-wrapper').forEach(el => el.classList.add('hidden'));
+            document.getElementById('main-menu').classList.remove('hidden');
+
+            // cleanup
+            if (typeof whackTimerInterval !== 'undefined') clearInterval(whackTimerInterval);
+        }
+
+        function handleMenuInput(type, dx, dy) {
+            // Placeholder for menu navigation with gamepad/keyboard
+        }
+
         function handleInput(type, dx, dy) {
             if (currentState === STATE.MENU) handleMenuInput(type, dx, dy);
             else if (currentState === STATE.PLAY || currentState === STATE.MEMORIZE) handleGameInput(type, dx, dy);
@@ -1440,9 +1923,232 @@
             }
         }
 
+        // --- SIMON GAME LOGIC ---
+        let simonSequence = [];
+        let simonPlayerInput = [];
+        let simonRound = 0;
+        let simonLocked = false;
+
+        const SIMON_SOUNDS = [
+            261.63, // C4 (Green)
+            329.63, // E4 (Red)
+            392.00, // G4 (Yellow)
+            523.25  // C5 (Blue)
+        ];
+
+        function playSimonTone(index) {
+            const o = new AudioContext();
+            const g = o.createGain();
+            const osc = o.createOscillator();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(SIMON_SOUNDS[index], o.currentTime);
+            g.gain.setValueAtTime(0.1, o.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.01, o.currentTime + 0.3);
+            osc.connect(g);
+            g.connect(o.destination);
+            osc.start();
+            osc.stop(o.currentTime + 0.3);
+        }
+
+        function flashSimonButton(index) {
+            const btn = document.querySelector(`.simon-btn[data-color="${index}"]`);
+            if (btn) {
+                btn.classList.add('active');
+                playSimonTone(index);
+                setTimeout(() => btn.classList.remove('active'), 300);
+            }
+        }
+
+        function startSimonGame() {
+            simonSequence = [];
+            simonRound = 0;
+            simonLocked = true;
+            document.getElementById('simon-status').textContent = "¡Atención!";
+            setTimeout(nextSimonRound, 1000);
+        }
+
+        function nextSimonRound() {
+            simonRound++;
+            simonPlayerInput = [];
+            document.getElementById('simon-status').textContent = `Nivel ${simonRound}`;
+
+            // Add random step
+            simonSequence.push(Math.floor(Math.random() * 4));
+
+            // Play sequence
+            simonLocked = true;
+            let i = 0;
+            const interval = setInterval(() => {
+                flashSimonButton(simonSequence[i]);
+                i++;
+                if (i >= simonSequence.length) {
+                    clearInterval(interval);
+                    simonLocked = false;
+                    document.getElementById('simon-status').textContent = "¡Tu turno!";
+                }
+            }, 800);
+        }
+
+        function handleSimonInput(index) {
+            if (simonLocked || APP_MODE !== 'SIMON') return;
+
+            flashSimonButton(index);
+            simonPlayerInput.push(index);
+
+            // Check correctness
+            const currentStep = simonPlayerInput.length - 1;
+            if (simonPlayerInput[currentStep] !== simonSequence[currentStep]) {
+                document.getElementById('simon-status').textContent = "❌ ¡Oh no! Intenta otra vez.";
+                SFX.error();
+                simonLocked = true;
+                return;
+            }
+
+            if (simonPlayerInput.length === simonSequence.length) {
+                // Round Complete
+                simonLocked = true;
+                setTimeout(nextSimonRound, 1000);
+            }
+        }
+
+        // --- WHACK GAME LOGIC ---
+        let whackScore = 0;
+        let whackTime = 30;
+        let lastHole;
+        let whackGameOver = false;
+        let whackTimerInterval;
+
+        function randomTime(min, max) {
+            return Math.round(Math.random() * (max - min) + min);
+        }
+
+        function randomHole(holes) {
+            const idx = Math.floor(Math.random() * holes.length);
+            const hole = holes[idx];
+            if (hole === lastHole) return randomHole(holes);
+            lastHole = hole;
+            return hole;
+        }
+
+        function peep() {
+            if (whackGameOver || APP_MODE !== 'WHACK') return;
+            const time = randomTime(600, 1200);
+            const holes = document.querySelectorAll('.hole');
+            const hole = randomHole(holes);
+            const mole = hole.querySelector('.mole');
+
+            // Random Avatar
+            const randomPlayer = PLAYERS[Math.floor(Math.random() * PLAYERS.length)];
+            mole.innerHTML = getAvatarSVG(randomPlayer.name, false);
+
+            mole.classList.add('up');
+
+            setTimeout(() => {
+                mole.classList.remove('up');
+                if (!whackGameOver && APP_MODE === 'WHACK') peep();
+            }, time);
+        }
+
+        function startWhackGame() {
+            whackScore = 0;
+            whackTime = 30;
+            whackGameOver = false;
+            document.getElementById('whack-score').textContent = 0;
+            document.getElementById('whack-timer').textContent = 30;
+
+            // Attach Click Listeners
+            document.querySelectorAll('.mole').forEach(mole => {
+                mole.onclick = function () {
+                    if (!this.classList.contains('up')) return;
+                    whackScore++;
+                    this.classList.remove('up');
+                    document.getElementById('whack-score').textContent = whackScore;
+                    SFX.select();
+                    if (navigator.vibrate) navigator.vibrate(20);
+                };
+            });
+
+            whackTimerInterval = setInterval(() => {
+                if (APP_MODE !== 'WHACK') { clearInterval(whackTimerInterval); return; }
+                whackTime--;
+                document.getElementById('whack-timer').textContent = whackTime;
+                if (whackTime <= 0) {
+                    endWhackGame();
+                }
+            }, 1000);
+
+            peep();
+        }
+
+        function endWhackGame() {
+            whackGameOver = true;
+            clearInterval(whackTimerInterval);
+            // Hide all moles
+            document.querySelectorAll('.mole').forEach(m => m.classList.remove('up'));
+
+            SFX.win();
+            // Reuse Memory Game Over screen or simple alert for now
+            // Just modifying the header temporarily
+            const originalHeader = document.querySelector('#whack-game-wrapper h1').textContent;
+            document.querySelector('#whack-game-wrapper h1').textContent = `¡Fin! Puntos: ${whackScore}`;
+            setTimeout(() => {
+                document.querySelector('#whack-game-wrapper h1').textContent = originalHeader; // Reset
+            }, 3000);
+        }
+
+        // --- RACE GAME LOGIC ---
+
+
+
+
+
+
+
+
+
+
+        function advanceRacePlayer(index) {
+            if (!raceActive) return;
+            const p = racePlayers[index];
+            if (p.done) return;
+
+            p.pos += 5;
+            const char = document.getElementById(`race-char-${index}`);
+            char.style.left = p.pos + '%';
+
+            // Anim
+            char.classList.add('running');
+            if (p.animTimeout) clearTimeout(p.animTimeout);
+            p.animTimeout = setTimeout(() => char.classList.remove('running'), 200);
+
+            if (navigator.vibrate) navigator.vibrate(10);
+
+            if (p.pos >= raceFinishLine) {
+                p.done = true;
+                raceActive = false;
+                endRaceGame(index);
+            }
+        }
+
+        function endRaceGame(winnerIndex) {
+            SFX.win();
+            const winnerName = RACE_NAMES[winnerIndex];
+            triggerConfetti(RACE_COLORS[winnerIndex], 100);
+
+            setTimeout(() => {
+                document.getElementById('race-winner').classList.remove('hidden');
+                document.getElementById('race-winner-text').innerHTML = `¡Ganador:<br><span style="color:${RACE_COLORS[winnerIndex]}">${winnerName}</span>!`;
+            }, 500);
+        }
+
+
+
         // --- KEYBOARD ---
         window.addEventListener('keydown', (e) => {
             let handled = false;
+
+
+
             if (e.key === 'ArrowRight') { handleInput('move', 1, 0); handled = true; }
             if (e.key === 'ArrowLeft') { handleInput('move', -1, 0); handled = true; }
             if (e.key === 'ArrowDown') { handleInput('move', 0, 1); handled = true; }
