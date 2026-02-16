@@ -109,6 +109,206 @@
             width: 100%;
         }
 
+        /* --- SKATING GAME --- */
+        #skating-game-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F7FA 40%, #8D6E63 40%);
+            /* Sky then Ground */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 100;
+        }
+
+        #skating-sky {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 30%;
+            /* Matches Horizon split */
+            overflow: hidden;
+            z-index: 5;
+            /* Behind UI but above road background? No, road is z-index 100 wrapper? */
+            /* Wait, wrapper has z-index 100. Sky is child. */
+        }
+
+        .sky-object {
+            position: absolute;
+            font-size: 3rem;
+        }
+
+        #skating-road-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            perspective: 600px;
+            /* Standard perspective to fix visibility */
+            perspective-origin: 50% 30%;
+            /* Horizon */
+            overflow: hidden;
+            /* Textured Ground */
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F7FA 30%, #4caf50 30%, #388E3C 100%);
+        }
+
+        @keyframes skateLeg {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(15deg);
+            }
+
+            75% {
+                transform: rotate(-15deg);
+            }
+        }
+
+        @keyframes flyPlane {
+            0% {
+                transform: translateX(120vw) translateY(0);
+            }
+
+            50% {
+                transform: translateX(0) translateY(20px);
+            }
+
+            100% {
+                transform: translateX(-120vw) translateY(-20px);
+            }
+        }
+
+        #skating-road {
+            position: absolute;
+            top: 30%;
+            width: 4000px;
+            /* Huge width for ground */
+            height: 2000px;
+            /* Center is road, sides are grass. */
+            /* Linear gradient: Green | White | Gray | White | Green */
+            background: linear-gradient(90deg,
+                    #4caf50 0%, #4caf50 calc(50% - 500px),
+                    #fff calc(50% - 500px), #fff calc(50% - 480px),
+                    #555 calc(50% - 480px), #555 calc(50% + 480px),
+                    #fff calc(50% + 480px), #fff calc(50% + 500px),
+                    #4caf50 500px, #4caf50 100%);
+            transform: rotateX(70deg);
+            transform-origin: 50% 0%;
+            /* No borders needed if using gradient */
+            box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.5);
+            overflow: visible;
+        }
+
+        #skating-sun {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, #ffd700 20%, #ffa500 80%);
+            border-radius: 50%;
+            box-shadow: 0 0 50px #ffd700;
+            z-index: 10;
+        }
+
+        /* Removed side-scenery class, using obstacle-container */
+
+        .road-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 100px;
+            background: #fff;
+        }
+
+        #skater-player {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 120px;
+            z-index: 50;
+            transition: left 0.1s ease-out;
+            filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.3));
+        }
+
+        .obstacle {
+            position: absolute;
+            transform-origin: bottom center;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            transition: bottom 0.1s linear;
+            transform: rotateX(-70deg);
+            /* Stand up */
+            pointer-events: none;
+            /* DEEP Volume Effect */
+            text-shadow:
+                0px 0px 0 #222,
+                1px 1px 0 #222, 2px 2px 0 #222, 3px 3px 0 #222, 4px 4px 0 #222, 5px 5px 0 #222,
+                6px 6px 0 #222, 7px 7px 0 #222, 8px 8px 0 #222, 9px 9px 0 #222, 10px 10px 0 #222,
+                11px 11px 0 #222, 12px 12px 0 #222, 13px 13px 0 #222, 14px 14px 0 #222, 15px 15px 0 #222,
+                20px 30px 20px rgba(0, 0, 0, 0.6);
+            /* Ground Shadow */
+        }
+
+        /* Specific Sizes */
+        .obs-tree {
+            font-size: 10rem;
+            color: #2E7D32;
+        }
+
+        .obs-car {
+            font-size: 14rem;
+            z-index: 1001;
+        }
+
+        .obs-bike {
+            font-size: 7rem;
+        }
+
+        .obs-person {
+            font-size: 7rem;
+        }
+
+        #skating-ui {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            z-index: 200;
+        }
+
+        .skating-meter {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #000;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.2);
+        }
+
         /* --- PIANO GAME --- */
         #piano-game-wrapper {
             display: flex;
@@ -462,7 +662,7 @@
             background: var(--yake-color);
             color: white;
             border-color: #1976D2;
-            box-shadow: 0 4px 0 #0D47A1;
+            box-shadow: 0 44px 0 #0D47A1;
             transform: translateY(2px);
         }
 
@@ -1134,10 +1334,84 @@
                 <div class="icon">🎹</div>
                 <div class="title">Piano Hero</div>
             </div>
+            <div class="game-card" onclick="openGame('SKATING')">
+                <div class="icon">⛸️</div>
+                <div class="title">Patinaje</div>
+            </div>
         </div>
     </div>
 
     <button id="back-to-menu" onclick="goToMainMenu()">🏠 Menú</button>
+
+    <!-- SKATING GAME WRAPPER -->
+    <div id="skating-game-wrapper" class="game-wrapper hidden">
+        <div id="skating-ui">
+            <div class="skating-meter" style="transform: rotate(-2deg);">
+                DISTANCIA<br>
+                <span id="skate-dist">0</span> m
+            </div>
+            <div class="skating-meter" style="transform: rotate(2deg);">
+                VELOCIDAD<br>
+                <span id="skate-speed">0</span> Km/h
+            </div>
+        </div>
+
+        <div id="skating-sky">
+            <!-- Sun is separate now -->
+            <div class="sky-object" style="top: 100px; left: 10%; animation: flyPlane 15s linear infinite;">✈️</div>
+            <div class="sky-object" style="top: 50px; left: 20%; font-size: 5rem; opacity: 0.8;">☁️</div>
+            <div class="sky-object" style="top: 80px; right: 20%; font-size: 4rem; opacity: 0.8;">☁️</div>
+        </div>
+
+        <div id="skating-road-container">
+            <div id="skating-sun"></div>
+            <div id="skating-road">
+                <!-- Lines and Obstacles injected by JS -->
+            </div>
+            <!-- Side Scenery container -->
+            <div id="skating-side-left"
+                style="position: absolute; left: 0; width: 50%; height: 100%; pointer-events: none;"></div>
+            <div id="skating-side-right"
+                style="position: absolute; right: 0; width: 50%; height: 100%; pointer-events: none;"></div>
+        </div>
+
+        <div id="skater-player">
+            <!-- SVG Character -->
+            <svg viewBox="0 0 100 150" width="100%" height="100%">
+                <!-- Hair -->
+                <path d="M30 20 Q50 0 70 20 L80 80 Q50 90 20 80 Z" fill="#3E2723" />
+                <!-- Head -->
+                <circle cx="50" cy="30" r="20" fill="#FFCCBC" />
+                <!-- Eyes -->
+                <circle cx="45" cy="28" r="2" fill="#000" />
+                <circle cx="55" cy="28" r="2" fill="#000" />
+                <!-- Dress -->
+                <path d="M30 50 L70 50 L80 100 L20 100 Z" fill="#E91E63" />
+                <!-- Arms -->
+                <line x1="30" y1="60" x2="10" y2="80" stroke="#FFCCBC" stroke-width="5" />
+                <line x1="70" y1="60" x2="90" y2="80" stroke="#FFCCBC" stroke-width="5" />
+                <!-- Legs Group -->
+                <g class="legs">
+                    <!-- Left Leg -->
+                    <g style="animation: skateLeg 1s infinite alternate; transform-origin: 40px 100px;">
+                        <line x1="40" y1="100" x2="40" y2="130" stroke="#FFCCBC" stroke-width="5" />
+                        <rect x="30" y="130" width="20" height="10" fill="#333" />
+                        <circle cx="35" cy="142" r="3" fill="#888" />
+                        <circle cx="45" cy="142" r="3" fill="#888" />
+                    </g>
+                    <!-- Right Leg -->
+                    <g style="animation: skateLeg 1s infinite alternate-reverse; transform-origin: 60px 100px;">
+                        <line x1="60" y1="100" x2="60" y2="130" stroke="#FFCCBC" stroke-width="5" />
+                        <rect x="55" y="130" width="20" height="10" fill="#333" />
+                        <circle cx="60" cy="142" r="3" fill="#888" />
+                        <circle cx="70" cy="142" r="3" fill="#888" />
+                    </g>
+                </g>
+            </svg>
+        </div>
+
+        <!-- Controls Text Removed -->
+    </div>
 
     <!-- PIANO GAME WRAPPER -->
     <div id="piano-game-wrapper" class="game-wrapper hidden">
@@ -1980,27 +2254,6 @@
             renderScoreBoard();
         }
 
-        function renderScoreBoard() {
-            const board = document.getElementById('score-board');
-            board.innerHTML = '';
-            activePlayers.forEach((p, idx) => {
-                const isActive = (idx === currentPlayerIndex && currentState === STATE.PLAY);
-                const div = document.createElement('div');
-                div.className = `player-score ${isActive ? 'active' : ''}`;
-                div.style.color = p.color;
-                div.style.borderColor = p.color;
-
-                div.innerHTML = `
-                 <div class="avatar" style="width: 40px; height: 40px;">${getAvatarSVG(p.name, false)}</div>
-                 <div class="info-col">
-                    <div class="name">${p.name} <span style="font-size:0.8rem">🏆${p.wins}</span></div>
-                    <div class="score">Parejas: ${p.score}</div>
-                    <div class="magnets">${renderMagnets(p.magnets)}</div>
-                 </div>`;
-                board.appendChild(div);
-            });
-        }
-
         function renderMagnets(count) {
             let html = '';
             for (let i = 1; i <= 6; i++) {
@@ -2188,6 +2441,9 @@
                 // Piano Game
                 document.getElementById('piano-game-wrapper').classList.remove('hidden');
                 startPianoGame();
+            } else if (game === 'SKATING') {
+                document.getElementById('skating-game-wrapper').classList.remove('hidden');
+                startSkatingGame();
             }
         }
 
@@ -2209,6 +2465,9 @@
 
             if (currentState === STATE.HUB) handleHubInput(type, dx, dy);
             else if (currentState === STATE.MENU) handleMenuInput(type, dx, dy);
+            else if (APP_MODE === 'SKATING' && currentState === STATE.PLAY) {
+                if (type === 'move' && dx !== 0) handleSkatingInput(dx > 0 ? 'right' : 'left');
+            }
             else if (currentState === STATE.PLAY || currentState === STATE.MEMORIZE) handleGameInput(type, dx, dy);
             else if (currentState === STATE.BUILDER) handleBuilderInput(type, dx, dy);
             else if (currentState === STATE.GAME_OVER && type === 'action') resetGame();
@@ -2217,7 +2476,7 @@
         function handleHubInput(type, dx, dy) {
             if (type === 'move') {
                 const old = hubSelectionIndex;
-                if (dx > 0 || dy > 0) hubSelectionIndex = Math.min(4, hubSelectionIndex + 1); // 5 games
+                if (dx > 0 || dy > 0) hubSelectionIndex = Math.min(5, hubSelectionIndex + 1); // 6 games
                 if (dx < 0 || dy < 0) hubSelectionIndex = Math.max(0, hubSelectionIndex - 1);
                 if (old !== hubSelectionIndex) {
                     SFX.move();
@@ -2226,7 +2485,7 @@
             }
             if (type === 'action') {
                 SFX.select();
-                const games = ['MEMORY', 'SIMON', 'WHACK', 'BUILDER', 'PIANO'];
+                const games = ['MEMORY', 'SIMON', 'WHACK', 'BUILDER', 'PIANO', 'SKATING'];
                 openGame(games[hubSelectionIndex]);
             }
         }
@@ -2817,6 +3076,206 @@
             document.querySelectorAll('.piano-note').forEach(n => n.remove());
         }
 
+        // --- SKATING GAME LOGIC ---
+        let skateDist = 0;
+        let skateSpeed = 10; // km/h
+        let skateLane = 1; // 0=Left, 1=Center, 2=Right
+        let skateObstacles = [];
+        let skateScenery = []; // Side trees
+        let skateLastObstacleTime = 0;
+        let skateLastSceneryTime = 0;
+        let skateGameSpeed = 0; // Calculated per frame
+
+        function startSkatingGame() {
+            APP_MODE = 'SKATING';
+            currentState = STATE.PLAY;
+            skateDist = 0;
+            skateSpeed = 5;
+            skateLane = 1;
+            skateObstacles = [];
+            skateScenery = [];
+            skateLastObstacleTime = 0;
+            skateLastSceneryTime = 0;
+            skateGameSpeed = 0;
+
+            updateSkaterPos();
+
+            const road = document.getElementById('skating-road');
+            road.innerHTML = ''; // Clears            
+            // Initial Road Lines
+            for (let i = 0; i < 10; i++) {
+                spawnRoadLine(i * 300);
+            }
+        }
+
+        function spawnRoadLine(offsetY) {
+            const road = document.getElementById('skating-road');
+            const l = document.createElement('div');
+            l.className = 'road-line';
+            l.style.bottom = `${offsetY}px`;
+            road.appendChild(l);
+            return l;
+        }
+
+        function updateSkatingGame() {
+            // Speed Progression
+            if (skateSpeed < 15) skateSpeed += 0.005;      // Very slow start
+            else if (skateSpeed < 30) skateSpeed += 0.002; // Moderate
+            else if (skateSpeed < 50) skateSpeed += 0.001; // Max 50
+
+            skateDist += (skateSpeed / 3600) * 16 * 5; // Multiplier for game feel
+
+            document.getElementById('skate-dist').textContent = Math.floor(skateDist);
+            document.getElementById('skate-speed').textContent = Math.floor(skateSpeed);
+
+            // Visual Speed Factor
+            const moveAmt = skateSpeed * 0.4;
+
+            // Move Lines
+            document.querySelectorAll('.road-line').forEach(l => {
+                let y = parseFloat(l.style.bottom || 0);
+                y -= moveAmt;
+                if (y < -300) {
+                    y += 3000; // Loop for 2000px road? 
+                }
+                l.style.bottom = `${y}px`;
+            });
+
+            // Spawn Obstacles
+            const now = performance.now();
+            const spawnRate = Math.max(800, 3000 - (skateSpeed * 50));
+
+            if (now - skateLastObstacleTime > spawnRate) {
+                spawnObstacle();
+                skateLastObstacleTime = now;
+            }
+
+            // Spawn Scenery
+            if (now - skateLastSceneryTime > spawnRate * 0.5) { // More frequent scenery
+                spawnScenery();
+                skateLastSceneryTime = now;
+            }
+
+            // Move Obstacles
+            for (let i = skateObstacles.length - 1; i >= 0; i--) {
+                const obs = skateObstacles[i];
+                obs.y -= moveAmt;
+
+                obs.el.style.bottom = `${obs.y}px`;
+                // No manual Z-index needed if in 3D plane correctly, but z-index helps layering
+                obs.el.style.zIndex = 1000;
+
+                // Collision
+                // Objects are huge now. Hitbox needs to cover more logic.
+                // Player is at bottom ~20px.
+                // Obstacle "bottom" moves from 4000 to -500.
+                // When bottom is around 0-100, it's near player.
+                // Car size 12rem ~ 192px height?
+                if (obs.y < 200 && obs.y > -50) {
+                    if (obs.lane === skateLane) {
+                        gameOverSkating();
+                    }
+                }
+
+                if (obs.y < -500) {
+                    obs.el.remove();
+                    skateObstacles.splice(i, 1);
+                }
+            }
+
+            // Move Scenery
+            for (let i = skateScenery.length - 1; i >= 0; i--) {
+                const s = skateScenery[i];
+                s.y -= moveAmt; // Move same speed
+
+                s.el.style.bottom = `${s.y}px`;
+                if (s.y < -500) { s.el.remove(); skateScenery.splice(i, 1); }
+            }
+        }
+
+        function spawnObstacle() {
+            const types = [
+                { t: '🌳', c: 'obs-tree' },
+                { t: '🚲', c: 'obs-bike' },
+                { t: '🚶‍♀️', c: 'obs-person' },
+                { t: '🚘', c: 'obs-car' },
+                { t: '🚚', c: 'obs-car' }
+            ];
+            const data = types[Math.floor(Math.random() * types.length)];
+            const lane = Math.floor(Math.random() * 3);
+
+            const el = document.createElement('div');
+            el.className = `obstacle ${data.c}`;
+            el.textContent = data.t;
+            el.style.transform = "rotateX(-70deg)";
+
+            // Road width 1000px. Center +/- 500.
+            // Lanes: -300, 0, 300.
+            const xOffsets = ['-300px', '0px', '300px'];
+            el.style.left = `calc(50% + ${xOffsets[lane]})`;
+            el.style.bottom = '2500px';
+
+            document.getElementById('skating-road').appendChild(el);
+
+            skateObstacles.push({ el, y: 2500, lane, type: data.t });
+        }
+
+        function spawnScenery() {
+            const types = ['🌲', '⛰️', '🏠', '🌴'];
+            const type = types[Math.floor(Math.random() * types.length)];
+            const side = Math.random() > 0.5 ? -1 : 1;
+
+            const el = document.createElement('div');
+            el.className = 'obstacle obs-tree'; // Reuse normal class
+            el.textContent = type;
+            el.style.transform = "rotateX(-70deg)";
+            el.style.filter = "grayscale(0.2)"; // Difference from active obstacles
+
+            // Road edge is at 500px. 
+            // Spawn closer to be visible: 550px to 900px.
+            const offset = 550 + Math.random() * 350;
+            el.style.left = `calc(50% + ${side * offset}px)`;
+            el.style.bottom = '2500px';
+
+            document.getElementById('skating-road').appendChild(el);
+            skateScenery.push({ el, y: 2500 });
+        }
+
+        function handleSkatingInput(dir) {
+            if (dir === 'left') {
+                if (skateLane > 0) skateLane--;
+            }
+            if (dir === 'right') {
+                if (skateLane < 2) skateLane++;
+            }
+            SFX.move();
+            updateSkaterPos();
+        }
+
+        function updateSkaterPos() {
+            const p = document.getElementById('skater-player');
+            // Updated for wider lanes (-300, 0, 300)
+            const leftPercents = ['calc(50% - 300px)', '50%', 'calc(50% + 300px)'];
+            p.style.left = leftPercents[skateLane];
+
+            // Tilt animation
+            p.style.transform = `translateX(-50%) rotate(${skateLane === 0 ? '-10deg' : skateLane === 2 ? '10deg' : '0deg'})`;
+        }
+
+        function gameOverSkating() {
+            APP_MODE = 'MENU'; // Stop updates
+            SFX.error();
+            document.getElementById('skating-ui').innerHTML += '<div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;padding:20px;border:3px solid red;font-size:2rem;z-index:999;">¡CHOQUE! 🤕</div>';
+            setTimeout(() => {
+                goToMainMenu();
+                // Reset UI
+                document.getElementById('skating-ui').innerHTML = `
+                    <div class="skating-meter" style="transform: rotate(-2deg);">DISTANCIA<br><span id="skate-dist">0</span> m</div>
+                    <div class="skating-meter" style="transform: rotate(2deg);">VELOCIDAD<br><span id="skate-speed">0</span> Km/h</div>
+                `;
+            }, 2000);
+        }
+
         function updatePianoGame() {
             const now = performance.now();
             const time = now - pianoStartTime;
@@ -3155,6 +3614,12 @@
                 }
             }
 
+            // Skating Input
+            if (APP_MODE === 'SKATING') {
+                if (e.key === 'ArrowLeft') { handleSkatingInput('left'); handled = true; }
+                if (e.key === 'ArrowRight') { handleSkatingInput('right'); handled = true; }
+            }
+
             if (handled) e.preventDefault();
         });
 
@@ -3163,6 +3628,9 @@
             pollGamepad();
             if (APP_MODE === 'PIANO' && currentState === STATE.PLAY) {
                 updatePianoGame();
+            }
+            if (APP_MODE === 'SKATING' && currentState === STATE.PLAY) {
+                updateSkatingGame();
             }
             requestAnimationFrame(gameLoop);
         }
