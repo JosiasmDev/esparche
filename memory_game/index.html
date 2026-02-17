@@ -192,18 +192,20 @@
         #skating-road {
             position: absolute;
             top: 30%;
+            left: 50%;
             width: 4000px;
             /* Huge width for ground */
             height: 2000px;
             /* Center is road, sides are grass. */
             /* Linear gradient: Green | White | Gray | White | Green */
+            /* Road width: ~600px total (300px per side) */
             background: linear-gradient(90deg,
-                    #4caf50 0%, #4caf50 calc(50% - 500px),
-                    #fff calc(50% - 500px), #fff calc(50% - 480px),
-                    #555 calc(50% - 480px), #555 calc(50% + 480px),
-                    #fff calc(50% + 480px), #fff calc(50% + 500px),
-                    #4caf50 500px, #4caf50 100%);
-            transform: rotateX(70deg);
+                    #4caf50 0%, #4caf50 calc(50% - 320px),
+                    #fff calc(50% - 320px), #fff calc(50% - 300px),
+                    #555 calc(50% - 300px), #555 calc(50% + 300px),
+                    #fff calc(50% + 300px), #fff calc(50% + 320px),
+                    #4caf50 320px, #4caf50 100%);
+            transform: translateX(-50%) rotateX(70deg);
             transform-origin: 50% 0%;
             /* No borders needed if using gradient */
             box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.5);
@@ -662,7 +664,7 @@
             background: var(--yake-color);
             color: white;
             border-color: #1976D2;
-            box-shadow: 0 44px 0 #0D47A1;
+            box-shadow: 0 4px 0 #0D47A1;
             transform: translateY(2px);
         }
 
@@ -1680,7 +1682,13 @@
         ];
 
         // Cargar victorias guardadas
-        const savedWinsRaw = JSON.parse(localStorage.getItem('memory_game_wins')) || [];
+        let savedWinsRaw = [];
+        try {
+            savedWinsRaw = JSON.parse(localStorage.getItem('memory_game_wins')) || [];
+        } catch (e) {
+            console.error("Error reading wins:", e);
+            savedWinsRaw = [];
+        }
         const savedWins = PLAYERS_DEFAULT.map((_, i) => savedWinsRaw[i] || 0);
 
         const PLAYERS = PLAYERS_DEFAULT.map((p, i) => ({ ...p, wins: savedWins[i] || 0 }));
@@ -2248,6 +2256,58 @@
             currentPlayerIndex = (currentPlayerIndex + 1) % activePlayers.length;
             updateTurnUI();
             updateCharacterPosition(true);
+        }
+
+        function renderScoreBoard() {
+            const board = document.getElementById('score-board');
+            if (!board) return;
+            board.innerHTML = '';
+
+            activePlayers.forEach((p, i) => {
+                const el = document.createElement('div');
+                el.className = `player-score ${i === currentPlayerIndex ? 'active' : ''}`;
+                el.style.borderColor = p.color;
+                if (i === currentPlayerIndex) {
+                    el.style.backgroundColor = p.color;
+                    el.style.color = 'white';
+                } else {
+                    el.style.color = p.color;
+                }
+
+                // Avatar Icon
+                const avatar = document.createElement('div');
+                avatar.className = 'avatar';
+                avatar.innerHTML = getAvatarSVG(p.name, false);
+                avatar.style.width = '30px';
+                avatar.style.height = '30px';
+
+                // Info
+                const info = document.createElement('div');
+                info.className = 'info-col';
+
+                const nameEl = document.createElement('div');
+                nameEl.className = 'name';
+                nameEl.textContent = p.name;
+
+                const scoreEl = document.createElement('div');
+                scoreEl.className = 'score';
+                scoreEl.textContent = `${p.score} pts`;
+
+                info.appendChild(nameEl);
+                info.appendChild(scoreEl);
+
+                // Magnets
+                if (p.magnets > 0) {
+                    const magEl = document.createElement('div');
+                    magEl.className = 'magnets';
+                    magEl.innerHTML = renderMagnets(p.magnets);
+                    info.appendChild(magEl);
+                }
+
+                el.appendChild(avatar);
+                el.appendChild(info);
+                board.appendChild(el);
+            });
         }
 
         function updateTurnUI() {
@@ -3209,9 +3269,9 @@
             el.textContent = data.t;
             el.style.transform = "rotateX(-70deg)";
 
-            // Road width 1000px. Center +/- 500.
-            // Lanes: -300, 0, 300.
-            const xOffsets = ['-300px', '0px', '300px'];
+            // Road width 600px (visual). Center +/- 300.
+            // Lanes: -200, 0, 200.
+            const xOffsets = ['-200px', '0px', '200px'];
             el.style.left = `calc(50% + ${xOffsets[lane]})`;
             el.style.bottom = '2500px';
 
@@ -3231,9 +3291,9 @@
             el.style.transform = "rotateX(-70deg)";
             el.style.filter = "grayscale(0.2)"; // Difference from active obstacles
 
-            // Road edge is at 500px. 
-            // Spawn closer to be visible: 550px to 900px.
-            const offset = 550 + Math.random() * 350;
+            // Road edge is at ~320px. 
+            // Spawn closer to be visible: 400px to 1200px.
+            const offset = 400 + Math.random() * 800;
             el.style.left = `calc(50% + ${side * offset}px)`;
             el.style.bottom = '2500px';
 
@@ -3254,8 +3314,8 @@
 
         function updateSkaterPos() {
             const p = document.getElementById('skater-player');
-            // Updated for wider lanes (-300, 0, 300)
-            const leftPercents = ['calc(50% - 300px)', '50%', 'calc(50% + 300px)'];
+            // Updated for narrower lanes (-200, 0, 200)
+            const leftPercents = ['calc(50% - 200px)', '50%', 'calc(50% + 200px)'];
             p.style.left = leftPercents[skateLane];
 
             // Tilt animation
@@ -3636,10 +3696,19 @@
         }
 
         // Init
-        renderPlayerOptions();
-        updateMenuVisuals();
-        updateHubVisuals();
-        gameLoop();
+        // Init
+        window.onload = () => {
+            renderPlayerOptions();
+            updateMenuVisuals();
+            updateHubVisuals();
+
+            // Ensure Menu is visible on load and overrides 'hidden' if set by mistake
+            if (APP_MODE === 'MENU') {
+                document.getElementById('main-menu').classList.remove('hidden');
+            }
+
+            gameLoop();
+        };
 
     </script>
 </body>
